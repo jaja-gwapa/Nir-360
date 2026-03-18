@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upload ID – User Registration & Identity Verification Module</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="steps">
+      <div class="step done"><span class="step-num">1</span>Register</div>
+      <div class="step done"><span class="step-num">2</span>OTP</div>
+      <div class="step done"><span class="step-num">3</span>Profile</div>
+      <div class="step active"><span class="step-num">4</span>ID</div>
+    </div>
+    <div class="card">
+      <h1>Government ID upload</h1>
+      <p class="subtitle">Upload front and back. We use OCR to extract and validate your ID (name, birthdate, address).</p>
+      <div id="ocr-info" class="ocr-info">
+        <strong>OCR for ID:</strong> After you upload, we extract text from your ID and compare:
+        <ul>
+          <li>Name match</li>
+          <li>Birthdate match</li>
+          <li>Address match</li>
+        </ul>
+      </div>
+      <div id="alert" class="alert alert-error" style="display: none;"></div>
+      <form id="id-form">
+        <div class="form-group id-upload-group">
+          <label>ID – Front *</label>
+          <div class="upload-zone" id="zone-front" data-side="front">
+            <input type="file" id="front" name="front" accept="image/*" />
+            <span class="upload-text">Upload image</span>
+            <span class="upload-hint">Click or drop – JPG or PNG</span>
+          </div>
+          <div class="id-display-wrap" id="display-wrap-front">
+            <span class="id-display-label">Uploaded image – Front</span>
+            <div class="id-display-box">
+              <img id="preview-front" class="id-display-img" alt="ID front preview" />
+              <button type="button" class="id-remove-btn" data-side="front" aria-label="Remove front image">Remove image</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group id-upload-group">
+          <label>ID – Back *</label>
+          <div class="upload-zone" id="zone-back" data-side="back">
+            <input type="file" id="back" name="back" accept="image/*" />
+            <span class="upload-text">Upload image</span>
+            <span class="upload-hint">Click or drop – JPG or PNG</span>
+          </div>
+          <div class="id-display-wrap" id="display-wrap-back">
+            <span class="id-display-label">Uploaded image – Back</span>
+            <div class="id-display-box">
+              <img id="preview-back" class="id-display-img" alt="ID back preview" />
+              <button type="button" class="id-remove-btn" data-side="back" aria-label="Remove back image">Remove image</button>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" id="submit-btn" disabled>Submit for OCR verification</button>
+      </form>
+      <p class="mt-2 text-center">
+        <a href="profile.html" class="link">Back</a>
+      </p>
+    </div>
+  </div>
+  <script src="js/app.js"></script>
+  <script src="js/upload-id.js"></script>
+</body>
+</html>

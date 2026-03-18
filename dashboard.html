@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard – User Registration & Identity Verification Module</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+        <h1 style="margin: 0;">Dashboard</h1>
+        <span id="role-badge" class="badge">Civilian</span>
+        <span id="verified-badge" class="badge" style="display: none;">✓ Verified</span>
+      </div>
+      <p class="subtitle">User Registration & Identity Verification – status</p>
+      <div id="status-card">
+        <p><strong>Status:</strong> <span id="verification-status">—</span></p>
+        <p><strong>Email:</strong> <span id="user-email">—</span></p>
+        <p><strong>Mobile:</strong> <span id="user-mobile">—</span></p>
+      </div>
+      <div id="ocr-section" class="ocr-comparison mt-2" style="display: none;">
+        <h3 style="font-size: 1rem; margin: 0 0 0.5rem 0;">OCR comparison</h3>
+        <ul class="ocr-list">
+          <li>Name match: <span id="ocr-name">—</span></li>
+          <li>Birthdate match: <span id="ocr-birthdate">—</span></li>
+          <li>Address match: <span id="ocr-address">—</span></li>
+        </ul>
+      </div>
+      <p class="mt-2" id="admin-link-wrap" style="display: none;">
+        <a href="admin.html" class="link">Admin panel – verification fallback</a>
+      </p>
+      <a href="index.html" class="btn btn-secondary">Sign out</a>
+    </div>
+  </div>
+  <script src="js/app.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+# Local config with secrets (copy from .example files)
+nir360/config/sms.local.php
+nir360/config/mail.local.php
+
+# Composer
+/vendor/
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db

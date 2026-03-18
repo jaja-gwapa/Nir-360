@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verify – User Registration & Identity Verification Module</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="landing">
+  <header class="landing-header">
+    <div class="landing-container">
+      <a href="index.html" class="landing-logo">Verify</a>
+      <span class="landing-module-name">User Registration & Identity Verification Module</span>
+      <nav class="landing-nav">
+        <button type="button" class="landing-btn-link btn-modal-open" data-modal="create-account">Create an Account</button>
+        <a href="dashboard.html" class="link">Sign in</a>
+        <a href="admin.html" class="link">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="landing-hero">
+      <div class="landing-container">
+        <h1 class="landing-title">User Registration & Identity Verification</h1>
+        <p class="landing-lead">Register with email and mobile, verify with OTP, complete your profile, and submit your government ID. Get a verified badge and join as a civilian or responder.</p>
+        <div class="landing-cta">
+          <button type="button" class="btn btn-primary btn-modal-open" data-modal="create-account">Get started – Register</button>
+          <a href="dashboard.html" class="btn btn-secondary">Sign in</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="landing-features">
+      <div class="landing-container">
+        <h2 class="landing-section-title">What you can do</h2>
+        <div class="landing-grid">
+          <div class="landing-feature">
+            <span class="landing-feature-icon">✓</span>
+            <h3>Register & verify</h3>
+            <p>Sign up with email, mobile, and password. Confirm your number with mobile OTP.</p>
+          </div>
+          <div class="landing-feature">
+            <span class="landing-feature-icon">👤</span>
+            <h3>Complete your profile</h3>
+            <p>Add your full name, address, barangay, birthdate, and emergency contact.</p>
+          </div>
+          <div class="landing-feature">
+            <span class="landing-feature-icon">🪪</span>
+            <h3>Upload government ID</h3>
+            <p>Submit front and back of your ID. We use OCR to validate name, birthdate, and address.</p>
+          </div>
+          <div class="landing-feature">
+            <span class="landing-feature-icon">★</span>
+            <h3>Get verified</h3>
+            <p>Earn a verified badge. Admins can approve or reject when automated checks need a fallback.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="landing-cta-section">
+      <div class="landing-container">
+        <h2 class="landing-section-title">Ready to get started?</h2>
+        <p class="landing-muted">Create an account as a civilian or responder. System admins can sign in separately.</p>
+        <div class="landing-cta">
+          <button type="button" class="btn btn-primary btn-modal-open" data-modal="create-account">Register now</button>
+          <a href="dashboard.html" class="link">Already have an account? Sign in</a>
+        </div>
+        <p class="landing-admin">
+          <a href="admin.html" class="link">System Admin – sign in</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Create an Account modal -->
+  <div id="create-account-modal" class="modal-overlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <h2 id="modal-title" class="modal-title">
+          <span class="modal-title-icon" aria-hidden="true">👤+</span>
+          Create an Account
+        </h2>
+        <button type="button" class="modal-close" aria-label="Close" data-modal-close>&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="modal-alert" class="alert alert-error" style="display: none;"></div>
+        <form id="modal-register-form">
+          <div class="modal-form-group">
+            <label for="modal-email">Email *</label>
+            <div class="input-wrap">
+              <span class="input-icon" aria-hidden="true">✉</span>
+              <input type="email" id="modal-email" name="email" placeholder="e.g., you@example.com" required />
+            </div>
+            <span class="field-hint">Enter your email address</span>
+          </div>
+          <div class="modal-form-group">
+            <label for="modal-mobile">Mobile number *</label>
+            <div class="input-wrap">
+              <span class="input-icon" aria-hidden="true">📱</span>
+              <input type="tel" id="modal-mobile" name="mobile" placeholder="e.g., 09171234567" required />
+            </div>
+            <span class="field-hint">Enter your mobile number for OTP verification</span>
+          </div>
+          <div class="modal-form-group">
+            <label for="modal-password">Password *</label>
+            <div class="input-wrap">
+              <span class="input-icon" aria-hidden="true">🔒</span>
+              <input type="password" id="modal-password" name="password" placeholder="••••••••" required minlength="8" />
+            </div>
+            <span class="field-hint">At least 8 characters, one letter, and one number.</span>
+          </div>
+          <div class="modal-form-group">
+            <label for="modal-role">I am a *</label>
+            <div class="input-wrap">
+              <span class="input-icon" aria-hidden="true">👥</span>
+              <select id="modal-role" name="role">
+                <option value="civilian">Civilian</option>
+                <option value="responder">Responder / Authority</option>
+              </select>
+            </div>
+            <span class="field-hint">Choose your role</span>
+          </div>
+          <button type="submit" class="btn btn-primary modal-submit">Create account</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer class="landing-footer">
+    <div class="landing-container">
+      <p class="landing-footer-text">Verify – User Registration & Identity Verification Module. Capstone project.</p>
+    </div>
+  </footer>
+  <script src="js/app.js"></script>
+  <script src="js/landing.js"></script>
+</body>
+</html>

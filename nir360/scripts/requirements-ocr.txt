@@ -1,0 +1,3 @@
+# Government ID OCR verification script dependencies
+pytesseract>=0.3.10
+opencv-python>=4.8.0

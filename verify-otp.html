@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verify OTP – User Registration & Identity Verification Module</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="steps">
+      <div class="step done"><span class="step-num">1</span>Register</div>
+      <div class="step active"><span class="step-num">2</span>OTP</div>
+      <div class="step"><span class="step-num">3</span>Profile</div>
+      <div class="step"><span class="step-num">4</span>ID</div>
+    </div>
+    <div class="card">
+      <h1>OTP Verification</h1>
+      <p class="subtitle">Enter the code sent to <strong id="send-to">your mobile</strong>.</p>
+      <div id="alert" class="alert alert-error" style="display: none;"></div>
+      <form id="otp-form">
+        <div class="form-group">
+          <label for="otp">Verification code</label>
+          <input type="text" id="otp" name="otp" class="otp-input" placeholder="000000" maxlength="6" pattern="[0-9]*" inputmode="numeric" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Verify</button>
+        <div class="resend-row">
+          <span class="text-muted" id="resend-label">Resend code in <span id="countdown">60</span>s</span>
+          <a href="#" id="resend-link" class="link" style="display: none;">Resend code</a>
+        </div>
+      </form>
+      <p class="mt-2 text-center">
+        <a href="register.html" class="link">Use a different number</a>
+      </p>
+    </div>
+  </div>
+  <script src="js/app.js"></script>
+  <script src="js/verify-otp.js"></script>
+</body>
+</html>

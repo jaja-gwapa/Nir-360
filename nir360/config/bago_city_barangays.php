@@ -1,0 +1,29 @@
+<?php
+/**
+ * Barangays of Bago City (for registration dropdown and server-side validation).
+ */
+return [
+    'Abuanan',
+    'Alianza',
+    'Atipuluan',
+    'Bacong',
+    'Bagroy',
+    'Balingasag',
+    'Binubuhan',
+    'Busay',
+    'Calumangan',
+    'Caridad',
+    'Dulao',
+    'Ilijan',
+    'Lag-asan',
+    'Mailum',
+    'Ma-ao',
+    'Malingin',
+    'Napoles',
+    'Pacol',
+    'Poblacion',
+    'Sagasa',
+    'Sampinit',
+    'Tabunan',
+    'Taloc',
+];
