@@ -60,6 +60,17 @@ $dashboardExtraHead = '<link rel="stylesheet" href="https://cdn.datatables.net/2
   .dataTables_wrapper .dataTables_paginate .paginate_button.current { background: #2563eb; color: #fff !important; border: 1px solid #2563eb; }
   .dataTables_wrapper .dataTables_paginate .paginate_button:hover:not(.current) { background: #f3f4f6; }
   @media (max-width: 768px) { .my-reports-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; } #my-reports-table thead th, #my-reports-table tbody td { font-size: 0.8rem; padding: 0.4rem 0.35rem; } }
+  
+  /* Announcements DataTable styles */
+  .announcements-table-wrap { width: 100%; overflow-x: auto; }
+  .announcements-datatable-panel { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-top: 0.5rem; }
+  #user-announcements-table { width: 100% !important; }
+  #user-announcements-table thead th { white-space: nowrap; text-align: left; vertical-align: middle; padding: 0.6rem 0.5rem; border-bottom: 2px solid #e2e8f0; background: #f8fafc; font-weight: 600; font-size: 0.85rem; color: #374151; }
+  #user-announcements-table tbody td { padding: 0.55rem 0.5rem; vertical-align: middle; font-size: 0.9rem; border-bottom: 1px solid #f1f5f9; }
+  #user-announcements-table tbody tr { cursor: pointer; }
+  #user-announcements-table tbody tr:hover { background: #f8fafc; }
+  #user-announcements-table .ann-body-cell { max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #555; }
+  @media (max-width: 768px) { .announcements-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; } #user-announcements-table thead th, #user-announcements-table tbody td { font-size: 0.8rem; padding: 0.4rem 0.35rem; } #user-announcements-table .ann-body-cell { max-width: 120px; } }
 </style>';
 ob_start();
 ?>
@@ -240,6 +251,45 @@ ob_start();
   </section>
 </div>
 
+<div id="announcements-content" style="display:none;">
+  <p class="role" style="margin-bottom:1rem;">Announcements from the administrator.</p>
+  <p style="margin-bottom:0.5rem;"><a href="#" id="back-to-form-from-ann" style="font-size:0.9rem;">← Submit new report</a></p>
+  <h2 style="font-size:1.1rem; margin-bottom:0.5rem;">All Announcements</h2>
+  <div class="announcements-datatable-panel">
+    <div class="announcements-table-wrap">
+      <table id="user-announcements-table" class="display" style="width:100%; border-collapse:collapse;">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Message</th>
+            <th>Date Posted</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="user-announcements-tbody">
+          <!-- Populated via JavaScript -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Announcement Detail Modal -->
+<div id="user-ann-detail-modal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center; padding:1rem;">
+  <div style="background:#fff; border-radius:10px; max-width:600px; width:100%; max-height:80vh; overflow-y:auto; box-shadow:0 4px 24px rgba(0,0,0,0.2);">
+    <div style="padding:1rem 1.25rem; border-bottom:1px solid #e5e7eb; display:flex; justify-content:space-between; align-items:center;">
+      <h3 style="margin:0; font-size:1.1rem;">Announcement Details</h3>
+      <button type="button" id="close-user-ann-modal" style="background:none; border:none; font-size:1.5rem; cursor:pointer; color:#666;">&times;</button>
+    </div>
+    <div style="padding:1.25rem;">
+      <h4 id="user-ann-modal-title" style="margin:0 0 0.25rem; font-size:1.1rem;"></h4>
+      <p id="user-ann-modal-date" style="margin:0 0 1rem; font-size:0.85rem; color:#666;"></p>
+      <div id="user-ann-modal-body" style="white-space:pre-wrap; font-size:0.95rem; line-height:1.6;"></div>
+    </div>
+  </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/2.3.7/js/dataTables.min.js"></script>
 <script>
@@ -412,36 +462,64 @@ ob_start();
     });
   }
 
-  // Sidebar "My reports" click: show reports table as main content (hide form)
-  function initSidebarMyReports() {
-    var sidebarMyReports = document.getElementById('sidebar-my-reports');
-    var myReportsContent = document.getElementById('my-reports-content');
-    var formView = document.getElementById('dashboard-form-view');
-    if (sidebarMyReports && myReportsContent && formView) {
-      sidebarMyReports.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        formView.style.display = 'none';
-        myReportsContent.style.display = 'block';
-        window.scrollTo(0, 0);
-      });
-    }
-    // "Submit new report" link: show form again, hide reports table
-    var backToForm = document.getElementById('back-to-form');
-    if (backToForm && formView && myReportsContent) {
-      backToForm.addEventListener('click', function(e) {
-        e.preventDefault();
-        myReportsContent.style.display = 'none';
-        formView.style.display = 'flex';
-        document.getElementById('editing-report-id').value = '';
-      });
-    }
+  // Sidebar navigation - event delegation for reliable click handling
+  var formView = document.getElementById('dashboard-form-view');
+  var myReportsContent = document.getElementById('my-reports-content');
+  var announcementsContent = document.getElementById('announcements-content');
+  
+  function hideAllViews() {
+    if (formView) formView.style.display = 'none';
+    if (myReportsContent) myReportsContent.style.display = 'none';
+    if (announcementsContent) announcementsContent.style.display = 'none';
   }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSidebarMyReports);
-  } else {
-    initSidebarMyReports();
+  
+  function showFormView() {
+    hideAllViews();
+    if (formView) formView.style.display = 'flex';
+    var editingEl = document.getElementById('editing-report-id');
+    if (editingEl) editingEl.value = '';
   }
+  
+  function showMyReportsView() {
+    hideAllViews();
+    if (myReportsContent) myReportsContent.style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+  
+  function showAnnouncementsView() {
+    hideAllViews();
+    if (announcementsContent) announcementsContent.style.display = 'block';
+    window.scrollTo(0, 0);
+    loadUserAnnouncementsTable();
+  }
+  
+  document.addEventListener('click', function(e) {
+    var target = e.target;
+    
+    // Handle "My Reports" sidebar link click
+    if (target.id === 'sidebar-my-reports' || target.closest('#sidebar-my-reports')) {
+      e.preventDefault();
+      e.stopPropagation();
+      showMyReportsView();
+      return;
+    }
+    
+    // Handle "Announcements" sidebar link click
+    if (target.id === 'sidebar-announcements-link' || target.closest('#sidebar-announcements-link')) {
+      e.preventDefault();
+      e.stopPropagation();
+      showAnnouncementsView();
+      return;
+    }
+    
+    // Handle "Submit new report" link clicks (from My Reports or Announcements)
+    if (target.id === 'back-to-form' || target.closest('#back-to-form') ||
+        target.id === 'back-to-form-from-ann' || target.closest('#back-to-form-from-ann')) {
+      e.preventDefault();
+      showFormView();
+      return;
+    }
+  });
 
   // Edit draft: load report into form and switch to form view
   document.querySelectorAll('.btn-edit-draft').forEach(function(btn) {
@@ -466,8 +544,10 @@ ob_start();
         if (typeof window.__nir360SetDraftLocation === 'function' && r.latitude != null && r.longitude != null) {
           window.__nir360SetDraftLocation(parseFloat(r.latitude), parseFloat(r.longitude), r.address || '');
         }
-        myReportsContent.style.display = 'none';
-        formView.style.display = 'flex';
+        var myReportsEl = document.getElementById('my-reports-content');
+        var formViewEl = document.getElementById('dashboard-form-view');
+        if (myReportsEl) myReportsEl.style.display = 'none';
+        if (formViewEl) formViewEl.style.display = 'flex';
       });
     });
   });
@@ -493,34 +573,110 @@ ob_start();
     }).catch(function() { notifEl.textContent = 'Unable to load.'; });
   }
 
-  // Load announcements from admin into sidebar (users can view)
-  var annEl = document.getElementById('sidebar-announcements');
-  if (annEl) {
-    annEl.textContent = 'Loading…';
+  // Announcements DataTable
+  var userAnnouncementsData = [];
+  var userAnnTableInitialized = false;
+  
+  function loadUserAnnouncementsTable() {
+    var tbody = document.getElementById('user-announcements-tbody');
+    if (!tbody) return;
+    
+    // Show loading state
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2rem; color:#666;">Loading announcements...</td></tr>';
+    
     fetch(base + '/api/announcements')
       .then(function(r) { return r.json(); })
       .then(function(d) {
         if (d.success && Array.isArray(d.announcements)) {
+          userAnnouncementsData = d.announcements;
+          
           if (d.announcements.length === 0) {
-            annEl.textContent = 'No announcements yet.';
-          } else {
-            var html = '';
-            d.announcements.forEach(function(a) {
-              html += '<div style="border:1px solid #e5e7eb; border-radius:6px; padding:0.5rem 0.6rem; margin-bottom:0.4rem; background:#fafafa;">';
-              html += '<strong style="font-size:0.85rem;">' + (a.title || '').replace(/</g, '&lt;') + '</strong>';
-              html += '<span style="color:var(--muted); font-size:0.75rem;"> ' + (a.created_at || '').replace(/</g, '&lt;') + '</span>';
-              html += '<p style="margin:0.25rem 0 0; font-size:0.8rem; white-space:pre-wrap; line-height:1.3;">' + (a.body || '').replace(/</g, '&lt;').replace(/\n/g, '<br>') + '</p>';
-              html += '</div>';
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2rem; color:#666;">No announcements yet.</td></tr>';
+            return;
+          }
+          
+          var html = '';
+          d.announcements.forEach(function(a, idx) {
+            var bodyPreview = (a.body || '').length > 80 ? (a.body || '').substring(0, 77) + '...' : (a.body || '');
+            html += '<tr class="ann-row" data-ann-idx="' + idx + '">';
+            html += '<td>' + (a.id || (idx + 1)) + '</td>';
+            html += '<td>' + escapeHtml(a.title || '') + '</td>';
+            html += '<td class="ann-body-cell" title="' + escapeHtml(a.body || '').replace(/"/g, '&quot;') + '">' + escapeHtml(bodyPreview).replace(/\n/g, ' ') + '</td>';
+            html += '<td>' + escapeHtml(a.created_at || '') + '</td>';
+            html += '<td><button type="button" class="btn btn-outline btn-view-user-ann" style="font-size:0.8rem; padding:0.25rem 0.5rem;">View</button></td>';
+            html += '</tr>';
+          });
+          tbody.innerHTML = html;
+          
+          // Initialize or refresh DataTable
+          if (!userAnnTableInitialized && typeof $ !== 'undefined' && $.fn.DataTable) {
+            $('#user-announcements-table').DataTable({
+              pageLength: 10,
+              lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
+              order: [[3, 'desc']],
+              columnDefs: [
+                { orderable: false, targets: 4 },
+                { width: '5%', targets: 0 },
+                { width: '20%', targets: 1 },
+                { width: '40%', targets: 2 },
+                { width: '20%', targets: 3 },
+                { width: '15%', targets: 4 }
+              ],
+              responsive: true,
+              language: {
+                search: 'Search:',
+                lengthMenu: 'Show _MENU_ entries',
+                info: 'Showing _START_ to _END_ of _TOTAL_ announcements',
+                infoEmpty: 'No announcements',
+                emptyTable: 'No announcements available',
+                paginate: { first: '«', last: '»', next: '›', previous: '‹' }
+              }
             });
-            annEl.innerHTML = html;
+            userAnnTableInitialized = true;
           }
         } else {
-          annEl.textContent = 'Unable to load announcements.';
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2rem; color:#c00;">Unable to load announcements.</td></tr>';
         }
       }).catch(function() {
-        annEl.textContent = 'Unable to load announcements.';
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2rem; color:#c00;">Unable to load announcements.</td></tr>';
       });
   }
+  
+  // Handle announcement row/button click to show modal
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.btn-view-user-ann');
+    var row = e.target.closest('.ann-row');
+    if (btn || (row && !e.target.closest('button'))) {
+      var annRow = e.target.closest('.ann-row');
+      if (annRow) {
+        var idx = parseInt(annRow.getAttribute('data-ann-idx'), 10);
+        if (!isNaN(idx) && userAnnouncementsData[idx]) {
+          var a = userAnnouncementsData[idx];
+          showUserAnnModal(a.title, a.body, a.created_at);
+        }
+      }
+    }
+  });
+  
+  function showUserAnnModal(title, body, date) {
+    var modal = document.getElementById('user-ann-detail-modal');
+    if (!modal) return;
+    
+    document.getElementById('user-ann-modal-title').textContent = title || '';
+    document.getElementById('user-ann-modal-date').textContent = date || '';
+    document.getElementById('user-ann-modal-body').textContent = body || '';
+    
+    modal.style.display = 'flex';
+  }
+  
+  // Close announcement modal
+  document.addEventListener('click', function(e) {
+    var modal = document.getElementById('user-ann-detail-modal');
+    if (!modal) return;
+    if (e.target === modal || e.target.id === 'close-user-ann-modal') {
+      modal.style.display = 'none';
+    }
+  });
 
   var logoutLink = document.querySelector('.header-logout');
   if (logoutLink) {
