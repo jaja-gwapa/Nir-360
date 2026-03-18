@@ -145,11 +145,8 @@ $roleLabel = ucfirst($role ?? 'user');
         <?php if (($role ?? null) === 'user'): ?>
           <div style="padding:0.5rem 0; border-top:1px solid var(--dash-sidebar-border); margin-top:0.5rem;">
             <a href="#" id="sidebar-my-reports" class="sidebar-user-link">My Reports</a>
+            <a href="#" id="sidebar-announcements-link" class="sidebar-user-link">Announcements</a>
             <a href="<?= htmlspecialchars($webBase ?? '') ?>/user/history" class="sidebar-user-link">History / Records</a>
-          </div>
-          <div style="padding:0.75rem 1.25rem; border-top:1px solid var(--dash-sidebar-border); margin-top:0.5rem;">
-            <div style="font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; color:var(--dash-section-color); margin-bottom:0.5rem;">Announcements</div>
-            <div id="sidebar-announcements" style="font-size:0.85rem; color:var(--dash-link-color); max-height:200px; overflow-y:auto;">No announcements yet.</div>
           </div>
         <?php endif; ?>
       </aside>
